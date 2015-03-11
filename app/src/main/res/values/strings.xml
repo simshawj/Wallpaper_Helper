@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (C) 2014 James Simshaw
+  ~
+  ~ This program is free software; you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation; either version 2 of the License.  This
+  ~ is available in the License.txt file included with the source code.
+  ~
+  ~ This program is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  -->
+
+<resources>
+    <string name="app_name">Wallpaper Helper</string>
+    <string name="serviceLabel">Wallpaper Helper</string>
+    <string name="wallpaperDescription">Changes wallpaper based on screen orientation</string>
+    <string name="prefMissing">One or both preferences missing.  Set both images.</string>
+    <string name="imgMissing">One or both images are missing.  Select available images</string>
+    <string name="landscapeSettingTitle">Select Landscape Picture</string>
+    <string name="portraitSettingTitle">Select Portrait Picture</string>
+    <string name="preferenceLabel">Preferences</string>
+    <string name="instructionsPortrait">Please go into settings and set a portrait wallpaper</string>
+    <string name="instructionsLandscape">Please go into settings and set a landscape wallpaper</string>
+    <string name="version">1.0</string>
+</resources>
