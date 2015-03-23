@@ -25,4 +25,8 @@
     <string name="instructionsPortrait">Please go into settings and set a portrait wallpaper</string>
     <string name="instructionsLandscape">Please go into settings and set a landscape wallpaper</string>
     <string name="version">1.0</string>
+    <string name="title_activity_image_zone_selection">ImageZoneSelectionActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>

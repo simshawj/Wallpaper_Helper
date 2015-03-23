@@ -66,11 +66,12 @@ public class Settings extends PreferenceActivity {
             if (resultCode == RESULT_OK) {
                 SharedPreferences preferences = getPreferenceManager().getSharedPreferences();
                 SharedPreferences.Editor editor = preferences.edit();
+                String imageUri = data.getData().toString();
                 if (requestCode == PICK_LANDSCAPE) {
-                    editor.putString("landscape", data.getData().toString());
+                    editor.putString("landscape", imageUri);
                     editor.apply();
                 } else if (requestCode == PICK_PORTRAIT) {
-                    editor.putString("portrait", data.getData().toString());
+                    editor.putString("portrait", imageUri);
                     editor.apply();
                 }
             }
