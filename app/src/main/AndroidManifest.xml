@@ -41,16 +41,16 @@
         </service>
 
         <activity
-            android:name=".Settings"
+            android:name=".SettingsActivity"
             android:label="@string/preferenceLabel" >
         </activity>
         <activity
             android:name=".ImageZoneSelectionActivity"
             android:label="@string/title_activity_image_zone_selection"
-            android:parentActivityName=".Settings" >
+            android:parentActivityName=".SettingsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.jamessimshaw.wallpaperhelper.Settings" />
+                android:value=".SettingsActivity" />
         </activity>
     </application>
 

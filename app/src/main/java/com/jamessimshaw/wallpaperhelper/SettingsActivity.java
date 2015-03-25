@@ -22,7 +22,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 
 
-public class Settings extends PreferenceActivity {
+public class SettingsActivity extends PreferenceActivity {
     private static final int PICK_LANDSCAPE = 1;
     private static final int PICK_PORTRAIT = 2;
 
