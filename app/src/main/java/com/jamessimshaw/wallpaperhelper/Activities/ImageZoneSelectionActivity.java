@@ -12,10 +12,12 @@
  *   GNU General Public License for more details.
  */
 
-package com.jamessimshaw.wallpaperhelper;
+package com.jamessimshaw.wallpaperhelper.Activities;
 
 import android.app.Activity;
 import android.os.Bundle;
+
+import com.jamessimshaw.wallpaperhelper.R;
 
 
 public class ImageZoneSelectionActivity extends Activity {

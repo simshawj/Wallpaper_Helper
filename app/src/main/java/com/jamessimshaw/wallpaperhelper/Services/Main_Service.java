@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  */
 
-package com.jamessimshaw.wallpaperhelper;
+package com.jamessimshaw.wallpaperhelper.Services;
 
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -30,6 +30,8 @@ import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.view.SurfaceHolder;
 
+import com.jamessimshaw.wallpaperhelper.R;
+
 import java.io.FileNotFoundException;
 
 public class Main_Service extends WallpaperService {
@@ -38,13 +40,14 @@ public class Main_Service extends WallpaperService {
         return new Wallpaper_Helper_Engine();
     }
 
-    private class Wallpaper_Helper_Engine extends Engine
-            implements SharedPreferences.OnSharedPreferenceChangeListener {
+    private class Wallpaper_Helper_Engine extends Engine {
+        public static final String LANDSCAPE_FILE = "";
+        public static final String PORTRAIT_FILE = "";
+
         private int mWidth;
         private int mHeight;
         private Bitmap mLandscapeBitmap;
         private Bitmap mPortraitBitmap;
-        private SharedPreferences mPreferences;
 
         private final Handler mHandler = new Handler();
         private final Runnable mRunner = new Runnable() {
@@ -55,8 +58,6 @@ public class Main_Service extends WallpaperService {
         };
 
         public Wallpaper_Helper_Engine() {
-            mPreferences = PreferenceManager.getDefaultSharedPreferences(Main_Service.this);
-            mPreferences.registerOnSharedPreferenceChangeListener(this);
             loadImages();
         }
 
@@ -85,9 +86,7 @@ public class Main_Service extends WallpaperService {
         }
 
         private void loadImages() {
-            String landscape = mPreferences.getString("landscape", "Failed");
-            String portrait = mPreferences.getString("portrait", "Failed");
-            try {
+            /*try {
                 mPortraitBitmap = BitmapFactory.decodeStream(getContentResolver()
                         .openInputStream(Uri.parse(portrait)));
             } catch (FileNotFoundException e) {
@@ -99,7 +98,7 @@ public class Main_Service extends WallpaperService {
             } catch (FileNotFoundException e) {
                 mLandscapeBitmap = null;
             }
-            mHandler.post(mRunner);
+            mHandler.post(mRunner);*/
         }
 
         @Override
@@ -134,28 +133,13 @@ public class Main_Service extends WallpaperService {
                 if (drawArea != null) {
                     Rect screenRect = new Rect(0, 0, mWidth, mHeight);
                     if (mWidth > mHeight) {
-                        if(mLandscapeBitmap != null) {
-                            drawArea.drawBitmap(mLandscapeBitmap, null, screenRect, null);
-                        } else {
-                            instructions(drawArea);
-                        }
+                        drawArea.drawBitmap(mLandscapeBitmap, null, screenRect, null);
                     } else {
-                        if(mPortraitBitmap != null) {
-                            drawArea.drawBitmap(mPortraitBitmap, null, screenRect, null);
-                        } else {
-                            instructions(drawArea);
-                        }
+                        drawArea.drawBitmap(mPortraitBitmap, null, screenRect, null);
                     }
                     holder.unlockCanvasAndPost(drawArea);
-                } else {
-                    //TODO: Error, canvas not locked
                 }
             }
-        }
-
-        @Override
-        public void onSharedPreferenceChanged(SharedPreferences preferences, String key) {
-            loadImages();
         }
     }
 }

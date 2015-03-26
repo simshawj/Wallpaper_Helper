@@ -12,14 +12,15 @@
  * GNU General Public License for more details.
  */
 
-package com.jamessimshaw.wallpaperhelper;
+package com.jamessimshaw.wallpaperhelper.Activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
+
+import com.jamessimshaw.wallpaperhelper.R;
 
 
 public class SettingsActivity extends PreferenceActivity {
@@ -64,16 +65,11 @@ public class SettingsActivity extends PreferenceActivity {
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
             if (resultCode == RESULT_OK) {
-                SharedPreferences preferences = getPreferenceManager().getSharedPreferences();
-                SharedPreferences.Editor editor = preferences.edit();
                 String imageUri = data.getData().toString();
-                if (requestCode == PICK_LANDSCAPE) {
-                    editor.putString("landscape", imageUri);
-                    editor.apply();
-                } else if (requestCode == PICK_PORTRAIT) {
-                    editor.putString("portrait", imageUri);
-                    editor.apply();
-                }
+                Intent intent = new Intent(getActivity(), ImageZoneSelectionActivity.class);
+                intent.putExtra("Type", requestCode);
+                intent.putExtra("ImageUri", imageUri);
+                startActivity(intent);
             }
         }
     }
