@@ -24,8 +24,8 @@ import com.jamessimshaw.wallpaperhelper.R;
 
 
 public class SettingsActivity extends PreferenceActivity {
-    private static final int PICK_LANDSCAPE = 1;
-    private static final int PICK_PORTRAIT = 2;
+    private static final int LANDSCAPE = 1;
+    private static final int PORTRAIT = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +51,10 @@ public class SettingsActivity extends PreferenceActivity {
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setType("image/*");
             if (preference.getKey().equals("landscape")) {
-                startActivityForResult(intent, PICK_LANDSCAPE);
+                startActivityForResult(intent, LANDSCAPE);
                 return true;
             } else if (preference.getKey().equals("portrait")) {
-                startActivityForResult(intent, PICK_PORTRAIT);
+                startActivityForResult(intent, PORTRAIT);
                 return true;
             } else {
                 return false;
@@ -67,8 +67,8 @@ public class SettingsActivity extends PreferenceActivity {
             if (resultCode == RESULT_OK) {
                 String imageUri = data.getData().toString();
                 Intent intent = new Intent(getActivity(), ImageZoneSelectionActivity.class);
-                intent.putExtra("Type", requestCode);
-                intent.putExtra("ImageUri", imageUri);
+                intent.putExtra("landscape", requestCode == LANDSCAPE);
+                intent.putExtra("imageUri", imageUri);
                 startActivity(intent);
             }
         }

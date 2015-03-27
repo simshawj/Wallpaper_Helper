@@ -16,14 +16,14 @@
 <resources>
     <string name="app_name">Wallpaper Helper</string>
     <string name="serviceLabel">Wallpaper Helper</string>
-    <string name="wallpaperDescription">Changes wallpaper based on screen orientation</string>
+    <string name="wallpaperDescription">Changes bitmap based on screen orientation</string>
     <string name="prefMissing">One or both preferences missing.  Set both images.</string>
     <string name="imgMissing">One or both images are missing.  Select available images</string>
     <string name="landscapeSettingTitle">Select Landscape Picture</string>
     <string name="portraitSettingTitle">Select Portrait Picture</string>
     <string name="preferenceLabel">Preferences</string>
-    <string name="instructionsPortrait">Please go into settings and set a portrait wallpaper</string>
-    <string name="instructionsLandscape">Please go into settings and set a landscape wallpaper</string>
+    <string name="instructionsPortrait">Please go into settings and set a portrait bitmap</string>
+    <string name="instructionsLandscape">Please go into settings and set a landscape bitmap</string>
     <string name="version">1.0</string>
     <string name="title_activity_image_zone_selection">ImageZoneSelectionActivity</string>
 
