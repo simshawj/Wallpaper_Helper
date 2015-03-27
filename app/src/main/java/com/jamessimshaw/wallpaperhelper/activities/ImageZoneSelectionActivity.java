@@ -34,7 +34,7 @@ public class ImageZoneSelectionActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image_zone_selection);
+        //setContentView(R.layout.activity_image_zone_selection);
 
         Intent intent = getIntent();
         try {
@@ -48,6 +48,6 @@ public class ImageZoneSelectionActivity extends Activity {
         catch (FileNotFoundException e) {
             //TODO:Handle this exception
         }
-        finish();
+        //finish();
     }
 }

@@ -29,7 +29,15 @@ public class Wallpaper {
         return mBitmap;
     }
 
+    public void setBitmap(Bitmap bitmap) {
+        mBitmap = bitmap;
+    }
+
     public boolean isLandscape() {
         return mIsLandscape;
+    }
+
+    public void setLandscape(boolean isLandscape) {
+        mIsLandscape = isLandscape;
     }
 }
