@@ -16,9 +16,7 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <Preference android:title="@string/landscapeSettingTitle"
-                android:key="landscape"
-                android:persistent="true" />
+                android:key="landscape" />
     <Preference android:title="@string/portraitSettingTitle"
-                android:key="portrait"
-                android:persistent="true" />
+                android:key="portrait" />
 </PreferenceScreen>

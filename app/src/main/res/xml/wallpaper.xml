@@ -14,7 +14,7 @@
   ~ GNU General Public License for more details.
   -->
 
-<bitmap xmlns:android="http://schemas.android.com/apk/res/android"
+<wallpaper xmlns:android="http://schemas.android.com/apk/res/android"
            android:thumbnail="@drawable/icon"
            android:description="@string/wallpaperDescription"
-           android:settingsActivity="com.jamessimshaw.wallpaperhelper.Settings" />
+           android:settingsActivity="com.jamessimshaw.wallpaperhelper.activities.SettingsActivity" />

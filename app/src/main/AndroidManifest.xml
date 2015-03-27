@@ -22,35 +22,38 @@
         android:required="true" />
 
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:icon="@drawable/icon"
         android:label="@string/app_name" >
         <service
-            android:name=".Services.MainService"
+            android:name=".services.MainService"
             android:enabled="true"
             android:label="@string/serviceLabel"
             android:permission="android.permission.BIND_WALLPAPER" >
             <intent-filter>
-                <action android:name="android.service.bitmap.WallpaperService" />
+                <action android:name="android.service.wallpaper.WallpaperService" />
             </intent-filter>
 
             <meta-data
-                android:name="android.service.bitmap"
-                android:resource="@xml/rotate_wallpaper" />
+                android:name="android.service.wallpaper"
+                android:resource="@xml/wallpaper" />
         </service>
 
         <activity
-            android:name=".Activities.SettingsActivity"
-            android:label="@string/preferenceLabel" >
+            android:name=".activities.SettingsActivity"
+            android:label="@string/preferenceLabel"
+            android:exported="true">
         </activity>
+
         <activity
-            android:name=".Activities.ImageZoneSelectionActivity"
+            android:name=".activities.ImageZoneSelectionActivity"
             android:label="@string/title_activity_image_zone_selection"
-            android:parentActivityName=".Activities.SettingsActivity" >
+            android:parentActivityName=".activities.SettingsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activities.SettingsActivity" />
+                android:value=".activities.SettingsActivity" />
         </activity>
     </application>
 

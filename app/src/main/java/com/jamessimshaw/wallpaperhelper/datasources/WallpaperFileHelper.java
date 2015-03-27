@@ -12,7 +12,7 @@
  *   GNU General Public License for more details.
  */
 
-package com.jamessimshaw.wallpaperhelper.DataSources;
+package com.jamessimshaw.wallpaperhelper.datasources;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -20,7 +20,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 
-import com.jamessimshaw.wallpaperhelper.Models.Wallpaper;
+import com.jamessimshaw.wallpaperhelper.models.Wallpaper;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

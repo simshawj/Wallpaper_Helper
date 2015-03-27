@@ -12,19 +12,24 @@
  *   GNU General Public License for more details.
  */
 
-package com.jamessimshaw.wallpaperhelper.Activities;
+package com.jamessimshaw.wallpaperhelper.models;
 
-import android.app.Activity;
-import android.os.Bundle;
+import android.graphics.Bitmap;
 
-import com.jamessimshaw.wallpaperhelper.R;
+public class Wallpaper {
+    private Bitmap mBitmap;
+    private boolean mIsLandscape;
 
+    public Wallpaper(Bitmap bitmap, boolean isLandscape) {
+        mBitmap = bitmap;
+        mIsLandscape = isLandscape;
+    }
 
-public class ImageZoneSelectionActivity extends Activity {
+    public Bitmap getBitmap() {
+        return mBitmap;
+    }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_image_zone_selection);
+    public boolean isLandscape() {
+        return mIsLandscape;
     }
 }

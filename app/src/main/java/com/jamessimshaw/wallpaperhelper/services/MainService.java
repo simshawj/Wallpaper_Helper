@@ -13,7 +13,7 @@
  * GNU General Public License for more details.
  */
 
-package com.jamessimshaw.wallpaperhelper.Services;
+package com.jamessimshaw.wallpaperhelper.services;
 
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -21,8 +21,8 @@ import android.os.Handler;
 import android.service.wallpaper.WallpaperService;
 import android.view.SurfaceHolder;
 
-import com.jamessimshaw.wallpaperhelper.DataSources.WallpaperFileHelper;
-import com.jamessimshaw.wallpaperhelper.Models.Wallpaper;
+import com.jamessimshaw.wallpaperhelper.datasources.WallpaperFileHelper;
+import com.jamessimshaw.wallpaperhelper.models.Wallpaper;
 
 public class MainService extends WallpaperService {
     @Override
@@ -46,6 +46,10 @@ public class MainService extends WallpaperService {
 
         public WallpaperHelperEngine() {
             setOffsetNotificationsEnabled(false);
+            loadImages();
+        }
+
+        public void loadImages() {
             WallpaperFileHelper fileHelper = new WallpaperFileHelper();
             mLandscape = fileHelper.loadWallpaper(MainService.this, true);
             mPortrait = fileHelper.loadWallpaper(MainService.this, false);
@@ -54,6 +58,9 @@ public class MainService extends WallpaperService {
         @Override
         public void onVisibilityChanged(boolean visible) {
             super.onVisibilityChanged(visible);
+            if(isPreview()) {
+                loadImages();       // Means that we came back from the settings page
+            }
             if (isVisible()) {
                 mHandler.post(mRunner);
             } else {
@@ -76,6 +83,7 @@ public class MainService extends WallpaperService {
         }
 
         private void setWallpaper() {
+            //TODO: Double check to see if this can get called when we're not visible
             if(isVisible()) {
                 SurfaceHolder holder = getSurfaceHolder();
                 Canvas drawArea = holder.lockCanvas();

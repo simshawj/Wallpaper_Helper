@@ -12,7 +12,7 @@
  * GNU General Public License for more details.
  */
 
-package com.jamessimshaw.wallpaperhelper.Activities;
+package com.jamessimshaw.wallpaperhelper.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
