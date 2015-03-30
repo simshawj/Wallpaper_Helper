@@ -36,7 +36,8 @@ public class SettingsActivity extends PreferenceActivity {
                 .commit();
     }
 
-    public static class SettingFrag extends PreferenceFragment implements Preference.OnPreferenceClickListener {
+    public static class SettingFrag extends PreferenceFragment
+            implements Preference.OnPreferenceClickListener {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -48,8 +49,10 @@ public class SettingsActivity extends PreferenceActivity {
 
         @Override
         public boolean onPreferenceClick(Preference preference) {
-            Intent intent = new Intent(Intent.ACTION_PICK);
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("image/*");
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);  //Currently only support local images
             if (preference.getKey().equals("landscape")) {
                 startActivityForResult(intent, LANDSCAPE);
                 return true;
