@@ -20,6 +20,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.jamessimshaw.wallpaperhelper.datasources.WallpaperFileHelper;
 import com.jamessimshaw.wallpaperhelper.models.Wallpaper;
@@ -29,25 +31,31 @@ import java.io.FileNotFoundException;
 
 
 public class ImageZoneSelectionActivity extends Activity {
+    private static final String TAG = ImageZoneSelectionActivity.class.getSimpleName();
     Bitmap mImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_image_zone_selection);
+        setContentView(R.layout.activity_image_zone_selection);
 
         Intent intent = getIntent();
+        loadBitmap(intent.getStringExtra("imageUri"));
+        WallpaperFileHelper wallpaperFileHelper = new WallpaperFileHelper();
+        wallpaperFileHelper.saveWallpaper(this, new Wallpaper(mImage,
+                intent.getBooleanExtra("landscape", true)));
+        //finish();
+    }
+
+    private void loadBitmap(String file) {
         try {
-            //FileInputStream fileInputStream;
             mImage = BitmapFactory.decodeStream(this.getContentResolver().openInputStream(
-                    Uri.parse(intent.getStringExtra("imageUri"))));
-            WallpaperFileHelper wallpaperFileHelper = new WallpaperFileHelper();
-            wallpaperFileHelper.saveWallpaper(this, new Wallpaper(mImage,
-                    intent.getBooleanExtra("landscape", true)));
+                    Uri.parse(file)));
         }
         catch (FileNotFoundException e) {
-            //TODO:Handle this exception
+            Log.e(TAG, getString(R.string.exceptionCaughtMessage), e);
+            Toast.makeText(this, getString(R.string.fileNotFoundToast), Toast.LENGTH_LONG).show();
+            finish();
         }
-        //finish();
     }
 }

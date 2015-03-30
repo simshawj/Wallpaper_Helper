@@ -58,10 +58,10 @@ public class MainService extends WallpaperService {
         @Override
         public void onVisibilityChanged(boolean visible) {
             super.onVisibilityChanged(visible);
-            if(isPreview()) {
-                loadImages();       // Means that we came back from the settings page
-            }
             if (isVisible()) {
+                if(isPreview()) {
+                    loadImages();       // Means that we came back from the settings page
+                }
                 mHandler.post(mRunner);
             } else {
                 mHandler.removeCallbacks(mRunner);
@@ -70,9 +70,9 @@ public class MainService extends WallpaperService {
 
         @Override
         public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+            super.onSurfaceChanged(holder, format, width, height);
             mHeight = height;
             mWidth = width;
-            super.onSurfaceChanged(holder, format, width, height);
             mHandler.post(mRunner);
         }
 

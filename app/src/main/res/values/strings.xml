@@ -29,4 +29,6 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="fileNotFoundToast">Unable to load file, please try again.</string>
+    <string name="exceptionCaughtMessage">"Exception caught: "</string>
 </resources>
