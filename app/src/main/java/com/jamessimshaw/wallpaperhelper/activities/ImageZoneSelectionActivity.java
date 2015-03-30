@@ -40,14 +40,17 @@ public class ImageZoneSelectionActivity extends Activity {
         setContentView(R.layout.activity_image_zone_selection);
 
         Intent intent = getIntent();
-        loadBitmap(intent.getStringExtra("imageUri"));
+        setImageFromFilename(intent.getStringExtra("imageUri"));
+
+
+        
         WallpaperFileHelper wallpaperFileHelper = new WallpaperFileHelper();
         wallpaperFileHelper.saveWallpaper(this, new Wallpaper(mImage,
                 intent.getBooleanExtra("landscape", true)));
         //finish();
     }
 
-    private void loadBitmap(String file) {
+    private void setImageFromFilename(String file) {
         try {
             mImage = BitmapFactory.decodeStream(this.getContentResolver().openInputStream(
                     Uri.parse(file)));
