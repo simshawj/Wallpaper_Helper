@@ -20,6 +20,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -33,21 +34,46 @@ import java.io.FileNotFoundException;
 public class ImageZoneSelectionActivity extends Activity {
     private static final String TAG = ImageZoneSelectionActivity.class.getSimpleName();
     Bitmap mImage;
+    int mScreenHeight;
+    int mScreenWidth;
+    boolean mIsLandscape;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_zone_selection);
 
+        getActionBar().hide();
+
         Intent intent = getIntent();
         setImageFromFilename(intent.getStringExtra("imageUri"));
+        mIsLandscape = intent.getBooleanExtra("landscape", true);
+        getScreenHeightAndWidth();
 
 
-        
         WallpaperFileHelper wallpaperFileHelper = new WallpaperFileHelper();
-        wallpaperFileHelper.saveWallpaper(this, new Wallpaper(mImage,
-                intent.getBooleanExtra("landscape", true)));
+        wallpaperFileHelper.saveWallpaper(this, new Wallpaper(mImage, mIsLandscape));
         //finish();
+    }
+
+    private void getScreenHeightAndWidth() {
+        int height;
+        int width;
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+
+        mScreenWidth = displayMetrics.widthPixels;
+        mScreenHeight = displayMetrics.heightPixels;
+
+        if (mIsLandscape) {
+            height = Math.min(mScreenHeight, mScreenWidth);
+            width = Math.max(mScreenHeight, mScreenWidth);
+        }
+        else {
+            height = Math.max(mScreenHeight, mScreenWidth);
+            width = Math.min(mScreenHeight, mScreenWidth);
+        }
+        mScreenHeight = height;
+        mScreenWidth = width;
     }
 
     private void setImageFromFilename(String file) {
