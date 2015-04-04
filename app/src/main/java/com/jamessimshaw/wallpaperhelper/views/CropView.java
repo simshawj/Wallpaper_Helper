@@ -20,6 +20,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.View;
 
 import com.jamessimshaw.wallpaperhelper.R;
@@ -28,6 +29,10 @@ public class CropView extends View {
     Bitmap mImage;
     boolean mCropLandscape;
     Paint mCropRectanglePaint;
+    int mHeight;
+    int mWidth;
+    int mScreenWidth;
+    int mScreenHeight;
 
 
     public CropView(Context context, AttributeSet attrs) {
@@ -36,6 +41,10 @@ public class CropView extends View {
     }
 
     private void init() {
+        DisplayMetrics display = getResources().getDisplayMetrics();
+        mScreenWidth = display.widthPixels;
+        mScreenHeight = display.heightPixels;
+
         mCropRectanglePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mCropRectanglePaint.setStyle(Paint.Style.STROKE);
         mCropRectanglePaint.setColor(Color.WHITE); //TODO: Choose a different color
@@ -48,6 +57,7 @@ public class CropView extends View {
 
     public void setCropLandscape(boolean cropLandscape) {
         mCropLandscape = cropLandscape;
+        invalidate();
     }
 
     public boolean isCropLandscape() {
@@ -56,7 +66,23 @@ public class CropView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        mHeight = determineDimension(mScreenHeight,
+                MeasureSpec.getSize(heightMeasureSpec),
+                MeasureSpec.getMode(heightMeasureSpec));
+        mWidth = determineDimension(mScreenWidth,
+                MeasureSpec.getSize(widthMeasureSpec),
+                MeasureSpec.getMode(widthMeasureSpec));
 
+        setMeasuredDimension(mWidth, mHeight);
+    }
+
+    private int determineDimension(int desired, int given, int mode) {
+        switch (mode) {
+            case MeasureSpec.AT_MOST: return Math.min(desired, given);
+            case MeasureSpec.EXACTLY: return given;
+            case MeasureSpec.UNSPECIFIED: return desired;
+            default: return desired;
+        }
     }
 
     @Override
