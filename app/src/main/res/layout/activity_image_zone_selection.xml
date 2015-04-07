@@ -5,11 +5,10 @@
                 tools:context="com.jamessimshaw.wallpaperhelper.activities.ImageZoneSelectionActivity" >
 
 
-    <view
+    <com.jamessimshaw.wallpaperhelper.views.CropView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        class="com.jamessimshaw.wallpaperhelper.views.CropView"
-        android:id="@+id/view"
+        android:id="@+id/cropView"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"/>
 </RelativeLayout>

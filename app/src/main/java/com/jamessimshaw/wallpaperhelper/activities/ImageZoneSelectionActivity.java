@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.jamessimshaw.wallpaperhelper.datasources.WallpaperFileHelper;
 import com.jamessimshaw.wallpaperhelper.models.Wallpaper;
 import com.jamessimshaw.wallpaperhelper.R;
+import com.jamessimshaw.wallpaperhelper.views.CropView;
 
 import java.io.FileNotFoundException;
 
@@ -46,9 +47,13 @@ public class ImageZoneSelectionActivity extends Activity {
         getActionBar().hide();
 
         Intent intent = getIntent();
-        setImageFromFilename(intent.getStringExtra("imageUri"));
+        mImage = setImageFromFilename(intent.getStringExtra("imageUri"));
         mIsLandscape = intent.getBooleanExtra("landscape", true);
-        getScreenHeightAndWidth();
+        //getScreenHeightAndWidth();
+
+        CropView cropView = (CropView) findViewById(R.id.cropView);
+        cropView.setCropLandscape(mIsLandscape);
+        cropView.setImage(mImage);
 
 
         WallpaperFileHelper wallpaperFileHelper = new WallpaperFileHelper();
@@ -60,6 +65,7 @@ public class ImageZoneSelectionActivity extends Activity {
         int height;
         int width;
         DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
         mScreenWidth = displayMetrics.widthPixels;
         mScreenHeight = displayMetrics.heightPixels;
@@ -76,15 +82,16 @@ public class ImageZoneSelectionActivity extends Activity {
         mScreenWidth = width;
     }
 
-    private void setImageFromFilename(String file) {
+    private Bitmap setImageFromFilename(String file) {
         try {
-            mImage = BitmapFactory.decodeStream(this.getContentResolver().openInputStream(
+            return BitmapFactory.decodeStream(this.getContentResolver().openInputStream(
                     Uri.parse(file)));
         }
         catch (FileNotFoundException e) {
             Log.e(TAG, getString(R.string.exceptionCaughtMessage), e);
             Toast.makeText(this, getString(R.string.fileNotFoundToast), Toast.LENGTH_LONG).show();
             finish();
+            return null;
         }
     }
 }

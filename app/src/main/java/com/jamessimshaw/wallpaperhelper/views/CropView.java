@@ -19,35 +19,45 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
-
-import com.jamessimshaw.wallpaperhelper.R;
 
 public class CropView extends View {
     Bitmap mImage;
     boolean mCropLandscape;
     Paint mCropRectanglePaint;
+    Rect mCropRectangle;
     int mHeight;
     int mWidth;
     int mScreenWidth;
     int mScreenHeight;
+    float mScreenAspectRatio;
 
 
     public CropView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
+        mCropLandscape = true;
+        mImage = null;  //TODO: Create a better default
     }
 
     private void init() {
-        DisplayMetrics display = getResources().getDisplayMetrics();
-        mScreenWidth = display.widthPixels;
-        mScreenHeight = display.heightPixels;
+        setScreenDimensions();
 
         mCropRectanglePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mCropRectanglePaint.setStyle(Paint.Style.STROKE);
-        mCropRectanglePaint.setColor(Color.WHITE); //TODO: Choose a different color
+        mCropRectanglePaint.setColor(Color.parseColor("#FF33B5E5")); //TODO: Choose a different color
+        mCropRectanglePaint.setStrokeWidth(5);
+    }
+
+    private void setScreenDimensions() {
+        DisplayMetrics mDisplayMetrics = getResources().getDisplayMetrics();
+        mScreenWidth = mDisplayMetrics.widthPixels;  //TODO: Handle both orientations and changing orientations
+        mScreenHeight = mDisplayMetrics.heightPixels;
+
+        mScreenAspectRatio = ((float)mScreenWidth) / mScreenHeight;
     }
 
     public void setImage(Bitmap image) {
@@ -66,6 +76,7 @@ public class CropView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        setScreenDimensions();
         mHeight = determineDimension(mScreenHeight,
                 MeasureSpec.getSize(heightMeasureSpec),
                 MeasureSpec.getMode(heightMeasureSpec));
@@ -73,7 +84,41 @@ public class CropView extends View {
                 MeasureSpec.getSize(widthMeasureSpec),
                 MeasureSpec.getMode(widthMeasureSpec));
 
+        mCropRectangle = createCropRectangle(mWidth, mHeight);
+
         setMeasuredDimension(mWidth, mHeight);
+    }
+
+    private Rect createCropRectangle(int width, int height) {
+        int rectangleWidth;
+        int rectangleHeight;
+        int rectangleStartX;
+        int rectangleStartY;
+
+        //Calculate long side first, then short side TODO: Double check this
+        if(isCropLandscape()) {
+            rectangleWidth = (int)Math.round(width * 0.65);
+            rectangleHeight = determineCropRectangleDimension(rectangleWidth, width, height);
+        }
+        else {
+            rectangleHeight = (int)Math.round(height * 0.65);
+            rectangleWidth = determineCropRectangleDimension(rectangleHeight, width, height);
+        }
+        rectangleStartX = (width - rectangleWidth) / 2;
+        rectangleStartY = (height - rectangleHeight) / 2;
+        return new Rect(rectangleStartX,
+                rectangleStartY,
+                rectangleStartX + rectangleWidth,
+                rectangleStartY + rectangleHeight);
+    }
+
+    private int determineCropRectangleDimension(int sideOne, int width, int height) {
+        if (width > height) {
+            return Math.round(sideOne / mScreenAspectRatio);
+        }
+        else {
+            return Math.round(sideOne * mScreenAspectRatio);
+        }
     }
 
     private int determineDimension(int desired, int given, int mode) {
@@ -87,6 +132,6 @@ public class CropView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+        canvas.drawRect(mCropRectangle, mCropRectanglePaint);
     }
 }

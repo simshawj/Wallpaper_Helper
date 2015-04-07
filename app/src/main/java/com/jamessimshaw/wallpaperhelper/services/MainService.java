@@ -90,7 +90,7 @@ public class MainService extends WallpaperService {
 
                 if (drawArea != null) {
                     Rect screenRect = new Rect(0, 0, mWidth, mHeight);
-                    if (mWidth > mHeight) {
+                    if (mWidth > mHeight) { //TODO: Replace with correct orientation detection
                         drawArea.drawBitmap(mLandscape.getBitmap(), null, screenRect, null);
                     } else {
                         drawArea.drawBitmap(mPortrait.getBitmap(), null, screenRect, null);
