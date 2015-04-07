@@ -43,8 +43,10 @@
 
         <activity
             android:name=".activities.SettingsActivity"
-            android:label="@string/preferenceLabel"
-            android:exported="true">
+            android:label="@string/preferenceLabel">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
         </activity>
 
         <activity
