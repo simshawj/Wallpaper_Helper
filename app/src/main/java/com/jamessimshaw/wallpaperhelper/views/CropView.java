@@ -25,15 +25,13 @@ import android.util.DisplayMetrics;
 import android.view.View;
 
 public class CropView extends View {
-    Bitmap mImage;
-    boolean mCropLandscape;
-    Paint mCropRectanglePaint;
-    Rect mCropRectangle;
-    int mHeight;
-    int mWidth;
-    int mScreenWidth;
-    int mScreenHeight;
-    float mScreenAspectRatio;
+    private Bitmap mImage;
+    private boolean mCropLandscape;
+    private Paint mCropRectanglePaint;
+    private Rect mCropRectangle;
+    private int mScreenWidth;
+    private int mScreenHeight;
+    private float mScreenAspectRatio;
 
 
     public CropView(Context context, AttributeSet attrs) {
@@ -44,17 +42,15 @@ public class CropView extends View {
     }
 
     private void init() {
-        setScreenDimensions();
-
         mCropRectanglePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mCropRectanglePaint.setStyle(Paint.Style.STROKE);
-        mCropRectanglePaint.setColor(Color.parseColor("#FF33B5E5")); //TODO: Choose a different color
+        mCropRectanglePaint.setColor(Color.parseColor("#FF33B5E5")); //TODO: Fine tune color
         mCropRectanglePaint.setStrokeWidth(5);
     }
 
     private void setScreenDimensions() {
         DisplayMetrics mDisplayMetrics = getResources().getDisplayMetrics();
-        mScreenWidth = mDisplayMetrics.widthPixels;  //TODO: Handle both orientations and changing orientations
+        mScreenWidth = mDisplayMetrics.widthPixels;
         mScreenHeight = mDisplayMetrics.heightPixels;
 
         mScreenAspectRatio = ((float)mScreenWidth) / mScreenHeight;
@@ -76,17 +72,19 @@ public class CropView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int height;
+        int width;
         setScreenDimensions();
-        mHeight = determineDimension(mScreenHeight,
+        height = determineDimension(mScreenHeight,
                 MeasureSpec.getSize(heightMeasureSpec),
                 MeasureSpec.getMode(heightMeasureSpec));
-        mWidth = determineDimension(mScreenWidth,
+        width = determineDimension(mScreenWidth,
                 MeasureSpec.getSize(widthMeasureSpec),
                 MeasureSpec.getMode(widthMeasureSpec));
 
-        mCropRectangle = createCropRectangle(mWidth, mHeight);
+        mCropRectangle = createCropRectangle(width, height);
 
-        setMeasuredDimension(mWidth, mHeight);
+        setMeasuredDimension(width, height);
     }
 
     private Rect createCropRectangle(int width, int height) {
@@ -95,29 +93,33 @@ public class CropView extends View {
         int rectangleStartX;
         int rectangleStartY;
 
-        //Calculate long side first, then short side TODO: Double check this
+        //Calculate long side first, then short side
         if(isCropLandscape()) {
-            rectangleWidth = (int)Math.round(width * 0.65);
-            rectangleHeight = determineCropRectangleDimension(rectangleWidth, width, height);
+            rectangleWidth = determineLongSide(width);
+            rectangleHeight = determineShortSide(rectangleWidth, width, height);
         }
         else {
-            rectangleHeight = (int)Math.round(height * 0.65);
-            rectangleWidth = determineCropRectangleDimension(rectangleHeight, width, height);
+            rectangleHeight = determineLongSide(height);
+            rectangleWidth = determineShortSide(rectangleHeight, width, height);
         }
         rectangleStartX = (width - rectangleWidth) / 2;
         rectangleStartY = (height - rectangleHeight) / 2;
         return new Rect(rectangleStartX,
-                rectangleStartY,
-                rectangleStartX + rectangleWidth,
-                rectangleStartY + rectangleHeight);
+                        rectangleStartY,
+                        rectangleStartX + rectangleWidth,
+                        rectangleStartY + rectangleHeight);
     }
 
-    private int determineCropRectangleDimension(int sideOne, int width, int height) {
+    private int determineLongSide(int maxSize) {
+        return (int)Math.round(maxSize * 0.65);
+    }
+
+    private int determineShortSide(int longSide, int width, int height) {
         if (width > height) {
-            return Math.round(sideOne / mScreenAspectRatio);
+            return Math.round(longSide / mScreenAspectRatio);
         }
         else {
-            return Math.round(sideOne * mScreenAspectRatio);
+            return Math.round(longSide * mScreenAspectRatio);
         }
     }
 

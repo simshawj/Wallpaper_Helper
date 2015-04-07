@@ -34,10 +34,10 @@ import java.io.FileNotFoundException;
 
 public class ImageZoneSelectionActivity extends Activity {
     private static final String TAG = ImageZoneSelectionActivity.class.getSimpleName();
-    Bitmap mImage;
-    int mScreenHeight;
-    int mScreenWidth;
-    boolean mIsLandscape;
+    private Bitmap mImage;
+    private int mScreenHeight;
+    private int mScreenWidth;
+    private boolean mIsLandscape;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
