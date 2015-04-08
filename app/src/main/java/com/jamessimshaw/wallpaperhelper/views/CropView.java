@@ -24,21 +24,18 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
 
+// TODO: Check every Math.round call for off by 1 errors
 public class CropView extends View {
     private Bitmap mImage;
     private boolean mCropLandscape;
     private Paint mCropRectanglePaint;
     private Rect mCropRectangle;
-    private int mScreenWidth;
-    private int mScreenHeight;
-    private float mScreenAspectRatio;
+    private Rect mBaseBitmapArea;
 
 
     public CropView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
-        mCropLandscape = true;
-        mImage = null;  //TODO: Create a better default
     }
 
     private void init() {
@@ -46,23 +43,20 @@ public class CropView extends View {
         mCropRectanglePaint.setStyle(Paint.Style.STROKE);
         mCropRectanglePaint.setColor(Color.parseColor("#FF33B5E5")); //TODO: Fine tune color
         mCropRectanglePaint.setStrokeWidth(5);
-    }
 
-    private void setScreenDimensions() {
-        DisplayMetrics mDisplayMetrics = getResources().getDisplayMetrics();
-        mScreenWidth = mDisplayMetrics.widthPixels;
-        mScreenHeight = mDisplayMetrics.heightPixels;
-
-        mScreenAspectRatio = ((float)mScreenWidth) / mScreenHeight;
+        mCropLandscape = true;
+        mImage = null;
     }
 
     public void setImage(Bitmap image) {
         mImage = image;
+        requestLayout();
         invalidate();
     }
 
     public void setCropLandscape(boolean cropLandscape) {
         mCropLandscape = cropLandscape;
+        requestLayout();
         invalidate();
     }
 
@@ -72,22 +66,48 @@ public class CropView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int height;
-        int width;
-        setScreenDimensions();
-        height = determineDimension(mScreenHeight,
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        int screenWidth = displayMetrics.widthPixels;
+        int screenHeight = displayMetrics.heightPixels;
+        float aspectRatio = ((float)screenWidth) / screenHeight;
+
+        int height = determineDimension(screenHeight,
                 MeasureSpec.getSize(heightMeasureSpec),
                 MeasureSpec.getMode(heightMeasureSpec));
-        width = determineDimension(mScreenWidth,
+        int width = determineDimension(screenWidth,
                 MeasureSpec.getSize(widthMeasureSpec),
                 MeasureSpec.getMode(widthMeasureSpec));
 
-        mCropRectangle = createCropRectangle(width, height);
+        mCropRectangle = createCropRectangle(width, height, aspectRatio);
+        if (mImage != null) {
+            mBaseBitmapArea = createBaseBitmapRectangle(mImage, mCropRectangle);
+        }
+
 
         setMeasuredDimension(width, height);
     }
 
-    private Rect createCropRectangle(int width, int height) {
+    private Rect createBaseBitmapRectangle(Bitmap image, Rect containingRect) {
+        int imageWidth = image.getWidth();
+        int imageHeight = image.getHeight();
+        int containingWidth = containingRect.width();
+        int containingHeight = containingRect.height();
+        float multFactor = Math.min(((float)(imageHeight))/containingHeight,
+                                    ((float)imageWidth)/containingWidth);
+
+        int newImageWidth = Math.round(imageWidth / multFactor);
+        int newImageHeight = Math.round(imageHeight / multFactor);
+
+        int xOffset = (newImageWidth - containingWidth) / 2;
+        int yOffset = (newImageHeight - containingHeight) / 2;
+
+        return new Rect(containingRect.left - xOffset,
+                        containingRect.top - yOffset,
+                        containingRect.right + xOffset,
+                        containingRect.bottom + yOffset);
+    }
+
+    private Rect createCropRectangle(int width, int height, float ratio) {
         int rectangleWidth;
         int rectangleHeight;
         int rectangleStartX;
@@ -96,11 +116,11 @@ public class CropView extends View {
         //Calculate long side first, then short side
         if(isCropLandscape()) {
             rectangleWidth = determineLongSide(width);
-            rectangleHeight = determineShortSide(rectangleWidth, width, height);
+            rectangleHeight = determineShortSide(rectangleWidth, width, height, ratio);
         }
         else {
             rectangleHeight = determineLongSide(height);
-            rectangleWidth = determineShortSide(rectangleHeight, width, height);
+            rectangleWidth = determineShortSide(rectangleHeight, width, height, ratio);
         }
         rectangleStartX = (width - rectangleWidth) / 2;
         rectangleStartY = (height - rectangleHeight) / 2;
@@ -114,12 +134,12 @@ public class CropView extends View {
         return (int)Math.round(maxSize * 0.65);
     }
 
-    private int determineShortSide(int longSide, int width, int height) {
+    private int determineShortSide(int longSide, int width, int height, float ratio) {
         if (width > height) {
-            return Math.round(longSide / mScreenAspectRatio);
+            return Math.round(longSide / ratio);
         }
         else {
-            return Math.round(longSide * mScreenAspectRatio);
+            return Math.round(longSide * ratio);
         }
     }
 
@@ -134,6 +154,9 @@ public class CropView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        if(mImage != null) {
+            canvas.drawBitmap(mImage, null, mBaseBitmapArea, null);
+        }
         canvas.drawRect(mCropRectangle, mCropRectanglePaint);
     }
 }
