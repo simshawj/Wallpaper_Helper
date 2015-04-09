@@ -173,6 +173,11 @@ public class CropView extends View {
     }
 
     public Bitmap getCroppedImage() {
-        return mImage;  //TODO: Finish this
+        float imageHeightScaleFactor = ((float)mImage.getHeight()) / mBaseBitmapArea.height();
+        int xImageStart = Math.round((mCropRectangle.left - mBaseBitmapArea.left) * imageHeightScaleFactor);
+        int yImageStart = Math.round((mCropRectangle.top - mBaseBitmapArea.top) * imageHeightScaleFactor);
+        int width = Math.round(mCropRectangle.width() * imageHeightScaleFactor);
+        int height = Math.round(mCropRectangle.height() * imageHeightScaleFactor);
+        return Bitmap.createBitmap(mImage, xImageStart, yImageStart, width, height);
     }
 }
