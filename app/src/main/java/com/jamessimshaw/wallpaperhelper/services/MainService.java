@@ -59,8 +59,10 @@ public class MainService extends WallpaperService {
         public void onVisibilityChanged(boolean visible) {
             super.onVisibilityChanged(visible);
             if (isVisible()) {
+                // Means that we may have come back from the settings page
+                // So better to reload the images just in case
                 if(isPreview()) {
-                    loadImages();       // Means that we came back from the settings page
+                    loadImages();
                 }
                 mHandler.post(mRunner);
             } else {
@@ -90,7 +92,7 @@ public class MainService extends WallpaperService {
 
                 if (drawArea != null) {
                     Rect screenRect = new Rect(0, 0, mWidth, mHeight);
-                    if (mWidth > mHeight) { //TODO: Replace with correct orientation detection
+                    if (mWidth > mHeight) { //TODO: Replace with correct orientation detection if this isn't more efficient
                         drawArea.drawBitmap(mLandscape.getBitmap(), null, screenRect, null);
                     } else {
                         drawArea.drawBitmap(mPortrait.getBitmap(), null, screenRect, null);

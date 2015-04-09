@@ -24,4 +24,5 @@
     <string name="title_activity_image_zone_selection">ImageZoneSelectionActivity</string>
     <string name="fileNotFoundToast">Unable to load file, please try again.</string>
     <string name="exceptionCaughtMessage">"Exception caught: "</string>
+    <string name="invalidCrop">Please make sure image is at least as large as the crop area.</string>
 </resources>

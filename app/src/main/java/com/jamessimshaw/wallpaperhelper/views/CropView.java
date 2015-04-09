@@ -31,6 +31,7 @@ public class CropView extends View {
     private Paint mCropRectanglePaint;
     private Rect mCropRectangle;
     private Rect mBaseBitmapArea;
+    private double mScaleFactor;
 
 
     public CropView(Context context, AttributeSet attrs) {
@@ -44,6 +45,7 @@ public class CropView extends View {
         mCropRectanglePaint.setColor(Color.parseColor("#FF33B5E5")); //TODO: Fine tune color
         mCropRectanglePaint.setStrokeWidth(5);
 
+        mScaleFactor = 0.65;
         mCropLandscape = true;
         mImage = null;
     }
@@ -71,6 +73,7 @@ public class CropView extends View {
         int screenHeight = displayMetrics.heightPixels;
         float aspectRatio = ((float)screenWidth) / screenHeight;
 
+        //Determines the size of the view
         int height = determineDimension(screenHeight,
                 MeasureSpec.getSize(heightMeasureSpec),
                 MeasureSpec.getMode(heightMeasureSpec));
@@ -79,6 +82,7 @@ public class CropView extends View {
                 MeasureSpec.getMode(widthMeasureSpec));
 
         mCropRectangle = createCropRectangle(width, height, aspectRatio);
+        //Image could be null if it hasn't been set yet
         if (mImage != null) {
             mBaseBitmapArea = createBaseBitmapRectangle(mImage, mCropRectangle);
         }
@@ -95,9 +99,12 @@ public class CropView extends View {
         float multFactor = Math.min(((float)(imageHeight))/containingHeight,
                                     ((float)imageWidth)/containingWidth);
 
+        //sets the default height and width so that the image is at
+        //least as large as the containing rectangle
         int newImageWidth = Math.round(imageWidth / multFactor);
         int newImageHeight = Math.round(imageHeight / multFactor);
 
+        //calculates the difference in x and y coordinates relative to the internal rectangle
         int xOffset = (newImageWidth - containingWidth) / 2;
         int yOffset = (newImageHeight - containingHeight) / 2;
 
@@ -131,7 +138,7 @@ public class CropView extends View {
     }
 
     private int determineLongSide(int maxSize) {
-        return (int)Math.round(maxSize * 0.65);
+        return (int)Math.round(maxSize * mScaleFactor);
     }
 
     private int determineShortSide(int longSide, int width, int height, float ratio) {
@@ -154,9 +161,18 @@ public class CropView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        //Image could be null if it hasn't been set yet
         if(mImage != null) {
             canvas.drawBitmap(mImage, null, mBaseBitmapArea, null);
         }
         canvas.drawRect(mCropRectangle, mCropRectanglePaint);
+    }
+
+    public boolean isCropValid() {
+        return mBaseBitmapArea.contains(mCropRectangle);
+    }
+
+    public Bitmap getCroppedImage() {
+        return mImage;  //TODO: Finish this
     }
 }

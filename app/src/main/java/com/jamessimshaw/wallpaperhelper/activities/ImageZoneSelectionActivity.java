@@ -22,6 +22,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.jamessimshaw.wallpaperhelper.datasources.WallpaperFileHelper;
@@ -34,10 +36,8 @@ import java.io.FileNotFoundException;
 
 public class ImageZoneSelectionActivity extends Activity {
     private static final String TAG = ImageZoneSelectionActivity.class.getSimpleName();
-    private Bitmap mImage;
-    private int mScreenHeight;
-    private int mScreenWidth;
     private boolean mIsLandscape;
+    private CropView mCropView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,44 +46,23 @@ public class ImageZoneSelectionActivity extends Activity {
 
         getActionBar().hide();
 
+        Button cropButton = (Button) findViewById(R.id.cropButton);
+
         Intent intent = getIntent();
-        mImage = setImageFromFilename(intent.getStringExtra("imageUri"));
+        Bitmap baseImage = setImageFromFilename(intent.getStringExtra("imageUri"));
         mIsLandscape = intent.getBooleanExtra("landscape", true);
         //getScreenHeightAndWidth();
 
-        CropView cropView = (CropView) findViewById(R.id.cropView);
-        cropView.setCropLandscape(mIsLandscape);
-        cropView.setImage(mImage);
+        mCropView = (CropView) findViewById(R.id.cropView);
+        mCropView.setCropLandscape(mIsLandscape);
+        mCropView.setImage(baseImage);
 
-
-        WallpaperFileHelper wallpaperFileHelper = new WallpaperFileHelper();
-        wallpaperFileHelper.saveWallpaper(this, new Wallpaper(mImage, mIsLandscape));
-        //finish();
-    }
-
-    private void getScreenHeightAndWidth() {
-        int height;
-        int width;
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-
-        mScreenWidth = displayMetrics.widthPixels;
-        mScreenHeight = displayMetrics.heightPixels;
-
-        if (mIsLandscape) {
-            height = Math.min(mScreenHeight, mScreenWidth);
-            width = Math.max(mScreenHeight, mScreenWidth);
-        }
-        else {
-            height = Math.max(mScreenHeight, mScreenWidth);
-            width = Math.min(mScreenHeight, mScreenWidth);
-        }
-        mScreenHeight = height;
-        mScreenWidth = width;
+        cropButton.setOnClickListener(mCropButtonListener);
     }
 
     private Bitmap setImageFromFilename(String file) {
         try {
+            //TODO: Needs to be done async
             return BitmapFactory.decodeStream(this.getContentResolver().openInputStream(
                     Uri.parse(file)));
         }
@@ -94,4 +73,22 @@ public class ImageZoneSelectionActivity extends Activity {
             return null;
         }
     }
+
+    private View.OnClickListener mCropButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (mCropView.isCropValid()) {
+                Bitmap image = mCropView.getCroppedImage();
+                WallpaperFileHelper wallpaperFileHelper = new WallpaperFileHelper();
+                wallpaperFileHelper.saveWallpaper(ImageZoneSelectionActivity.this,
+                        new Wallpaper(image, mIsLandscape));
+                finish();
+            }
+            else {
+                Toast.makeText(ImageZoneSelectionActivity.this,
+                        getString(R.string.invalidCrop),
+                        Toast.LENGTH_LONG).show();
+            }
+        }
+    };
 }

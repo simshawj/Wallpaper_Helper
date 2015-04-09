@@ -1,14 +1,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 tools:context="com.jamessimshaw.wallpaperhelper.activities.ImageZoneSelectionActivity" >
 
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Set Image"
+        android:id="@+id/cropButton"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"/>
 
     <com.jamessimshaw.wallpaperhelper.views.CropView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/cropView"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/cropButton"/>
 </RelativeLayout>
