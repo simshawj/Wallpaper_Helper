@@ -1,16 +1,16 @@
 
 /*
- * Copyright (C) 2014 James Simshaw
+ * Copyright (C) 2014-2015 James Simshaw
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License.  This
- * is available in the License.txt file included with the source code.
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation; either version 2 of the License.  This
+ *   is available in the License.txt file included with the source code.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *   This program is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
  */
 
 package com.jamessimshaw.wallpaperhelper.services;
@@ -85,14 +85,13 @@ public class MainService extends WallpaperService {
         }
 
         private void setWallpaper() {
-            //TODO: Double check to see if this can get called when we're not visible
             if(isVisible()) {
                 SurfaceHolder holder = getSurfaceHolder();
                 Canvas drawArea = holder.lockCanvas();
 
                 if (drawArea != null) {
                     Rect screenRect = new Rect(0, 0, mWidth, mHeight);
-                    if (mWidth > mHeight) { //TODO: Replace with correct orientation detection if this isn't more efficient
+                    if (mWidth > mHeight) {
                         drawArea.drawBitmap(mLandscape.getBitmap(), null, screenRect, null);
                     } else {
                         drawArea.drawBitmap(mPortrait.getBitmap(), null, screenRect, null);

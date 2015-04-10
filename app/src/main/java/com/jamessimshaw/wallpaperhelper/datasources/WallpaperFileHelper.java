@@ -44,7 +44,7 @@ public class WallpaperFileHelper {
         catch (IOException e) {
             //TODO:Set a default Wallpaper of a black screen and send a notification
             Bitmap.Config bitmapOptions = Bitmap.Config.ARGB_8888;
-            bitmap = Bitmap.createBitmap(100, 100, bitmapOptions);  //TODO: Change 100 to something else?
+            bitmap = Bitmap.createBitmap(100, 100, bitmapOptions);
             Canvas canvas = new Canvas(bitmap);
             canvas.drawColor(Color.BLACK);
         }
@@ -59,7 +59,7 @@ public class WallpaperFileHelper {
             //TODO: Set this to be an async task
             FileOutputStream fileOutputStream = context.openFileOutput(filename,
                     Context.MODE_PRIVATE);
-            wallpaper.getBitmap().compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);  //TODO: What if this returns false
+            wallpaper.getBitmap().compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
             fileOutputStream.close();
         }
         catch (IOException e) {

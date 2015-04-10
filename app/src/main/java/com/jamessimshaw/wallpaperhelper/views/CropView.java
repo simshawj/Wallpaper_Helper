@@ -27,7 +27,6 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 
-// TODO: Check every Math.round call for off by 1 errors
 public class CropView extends View {
     private Bitmap mImage;
     private boolean mCropLandscape;
@@ -47,7 +46,7 @@ public class CropView extends View {
     private void init() {
         mCropRectanglePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mCropRectanglePaint.setStyle(Paint.Style.STROKE);
-        mCropRectanglePaint.setColor(Color.parseColor("#FF33B5E5")); //TODO: Fine tune color
+        mCropRectanglePaint.setColor(Color.parseColor("#FF33B5E5"));
         mCropRectanglePaint.setStrokeWidth(5);
 
         mScaleFactor = 0.65;

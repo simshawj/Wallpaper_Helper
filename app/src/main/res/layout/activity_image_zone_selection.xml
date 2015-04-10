@@ -1,3 +1,17 @@
+<!--
+  ~ Copyright (C) 2014-2015 James Simshaw
+  ~
+  ~   This program is free software; you can redistribute it and/or modify
+  ~   it under the terms of the GNU General Public License as published by
+  ~   the Free Software Foundation; either version 2 of the License.  This
+  ~   is available in the License.txt file included with the source code.
+  ~
+  ~   This program is distributed in the hope that it will be useful,
+  ~   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~   GNU General Public License for more details.
+  -->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
@@ -8,7 +22,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Set Image"
+        android:text="@string/setImageButtonText"
         android:id="@+id/cropButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"/>

@@ -20,7 +20,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -51,7 +50,6 @@ public class ImageZoneSelectionActivity extends Activity {
         Intent intent = getIntent();
         Bitmap baseImage = setImageFromFilename(intent.getStringExtra("imageUri"));
         mIsLandscape = intent.getBooleanExtra("landscape", true);
-        //getScreenHeightAndWidth();
 
         mCropView = (CropView) findViewById(R.id.cropView);
         mCropView.setCropLandscape(mIsLandscape);
