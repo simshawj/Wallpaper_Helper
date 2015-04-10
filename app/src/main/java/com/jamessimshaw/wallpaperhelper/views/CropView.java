@@ -22,6 +22,9 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 
 // TODO: Check every Math.round call for off by 1 errors
@@ -32,6 +35,8 @@ public class CropView extends View {
     private Rect mCropRectangle;
     private Rect mBaseBitmapArea;
     private double mScaleFactor;
+    private GestureDetector mGestureDetector;
+    private ScaleGestureDetector mScaleGestureDetector;
 
 
     public CropView(Context context, AttributeSet attrs) {
@@ -48,6 +53,8 @@ public class CropView extends View {
         mScaleFactor = 0.65;
         mCropLandscape = true;
         mImage = null;
+        mGestureDetector = new GestureDetector(this.getContext(), mGestureListener);
+        mScaleGestureDetector = new ScaleGestureDetector(this.getContext(), mScaleGestureListener);
     }
 
     public void setImage(Bitmap image) {
@@ -174,10 +181,70 @@ public class CropView extends View {
 
     public Bitmap getCroppedImage() {
         float imageHeightScaleFactor = ((float)mImage.getHeight()) / mBaseBitmapArea.height();
-        int xImageStart = Math.round((mCropRectangle.left - mBaseBitmapArea.left) * imageHeightScaleFactor);
-        int yImageStart = Math.round((mCropRectangle.top - mBaseBitmapArea.top) * imageHeightScaleFactor);
+        int xImageStart = Math.round((mCropRectangle.left - mBaseBitmapArea.left) *
+                imageHeightScaleFactor);
+        int yImageStart = Math.round((mCropRectangle.top - mBaseBitmapArea.top) *
+                imageHeightScaleFactor);
         int width = Math.round(mCropRectangle.width() * imageHeightScaleFactor);
         int height = Math.round(mCropRectangle.height() * imageHeightScaleFactor);
         return Bitmap.createBitmap(mImage, xImageStart, yImageStart, width, height);
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        int xStart = Math.round(event.getX());
+        int yStart = Math.round(event.getY());
+        if(mBaseBitmapArea.contains(xStart, yStart)) {
+            if (mScaleGestureDetector.onTouchEvent(event)) {
+                return true;
+            } else if (mGestureDetector.onTouchEvent(event)) {
+                return true;
+            }
+        }
+        return super.onTouchEvent(event);
+    }
+
+    private GestureDetector.SimpleOnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return true;
+        }
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            int xOffset = Math.round(distanceX);
+            int yOffset = Math.round(distanceY);
+            mBaseBitmapArea.set(mBaseBitmapArea.left - xOffset,
+                                mBaseBitmapArea.top - yOffset,
+                                mBaseBitmapArea.right - xOffset,
+                                mBaseBitmapArea.bottom - yOffset);
+            invalidate();
+            return true;
+        }
+    };
+
+    private ScaleGestureDetector.SimpleOnScaleGestureListener mScaleGestureListener = new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+        float startDistance;
+
+        @Override
+        public boolean onScaleBegin(ScaleGestureDetector detector) {
+            startDistance = detector.getCurrentSpan();
+            return true;
+        }
+
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            float currentDistance = detector.getCurrentSpan();
+            float scalingFactor = currentDistance / startDistance;
+            int newHeight = Math.round(mBaseBitmapArea.height() * scalingFactor);
+            int newWidth = Math.round(mBaseBitmapArea.width() * scalingFactor);
+            int xOffset = (newWidth - mBaseBitmapArea.height()) / 2;
+            int yOffset = (newHeight - mBaseBitmapArea.width()) / 2;
+            mBaseBitmapArea.set(mBaseBitmapArea.left - xOffset,
+                                mBaseBitmapArea.top - yOffset,
+                                mBaseBitmapArea.right + xOffset,
+                                mBaseBitmapArea.bottom + yOffset);
+            return true;
+        }
+    };
 }
