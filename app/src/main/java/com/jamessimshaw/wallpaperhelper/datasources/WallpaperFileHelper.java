@@ -52,18 +52,13 @@ public class WallpaperFileHelper {
         return new Wallpaper(bitmap, isLandscape);
     }
 
-    public void saveWallpaper(Context context, Wallpaper wallpaper) {
+    public void saveWallpaper(Context context, Wallpaper wallpaper) throws IOException {
         String filename = wallpaper.isLandscape() ? LANDSCAPE_FILENAME : PORTRAIT_FILENAME;
 
-        try {
-            //TODO: Set this to be an async task
-            FileOutputStream fileOutputStream = context.openFileOutput(filename,
-                    Context.MODE_PRIVATE);
-            wallpaper.getBitmap().compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
-            fileOutputStream.close();
-        }
-        catch (IOException e) {
-
-        }
+        //TODO: Set this to be an async task
+        FileOutputStream fileOutputStream = context.openFileOutput(filename,
+                Context.MODE_PRIVATE);
+        wallpaper.getBitmap().compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+        fileOutputStream.close();
     }
 }

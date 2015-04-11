@@ -26,4 +26,5 @@
     <string name="exceptionCaughtMessage">"Exception caught: "</string>
     <string name="invalidCrop">Please make sure image is at least as large as the crop area.</string>
     <string name="setImageButtonText">Set Image</string>
+    <string name="unableToSaveImageToast">Unable to save image, please try again.</string>
 </resources>

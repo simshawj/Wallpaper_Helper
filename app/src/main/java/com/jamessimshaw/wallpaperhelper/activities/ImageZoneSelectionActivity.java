@@ -31,6 +31,7 @@ import com.jamessimshaw.wallpaperhelper.R;
 import com.jamessimshaw.wallpaperhelper.views.CropView;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 
 public class ImageZoneSelectionActivity extends Activity {
@@ -78,9 +79,16 @@ public class ImageZoneSelectionActivity extends Activity {
             if (mCropView.isCropValid()) {
                 Bitmap image = mCropView.getCroppedImage();
                 WallpaperFileHelper wallpaperFileHelper = new WallpaperFileHelper();
-                wallpaperFileHelper.saveWallpaper(ImageZoneSelectionActivity.this,
-                        new Wallpaper(image, mIsLandscape));
-                finish();
+                try {
+                    wallpaperFileHelper.saveWallpaper(ImageZoneSelectionActivity.this,
+                            new Wallpaper(image, mIsLandscape));
+                    finish();
+                }
+                catch (IOException e) {
+                    Log.e(TAG, getString(R.string.exceptionCaughtMessage), e);
+                    Toast.makeText(ImageZoneSelectionActivity.this,
+                            getString(R.string.unableToSaveImageToast), Toast.LENGTH_LONG).show();
+                }
             }
             else {
                 Toast.makeText(ImageZoneSelectionActivity.this,
