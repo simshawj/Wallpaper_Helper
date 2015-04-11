@@ -85,20 +85,19 @@ public class MainService extends WallpaperService {
         }
 
         private void setWallpaper() {
-            if(isVisible()) {
-                SurfaceHolder holder = getSurfaceHolder();
-                Canvas drawArea = holder.lockCanvas();
+            SurfaceHolder holder = getSurfaceHolder();
+            Canvas drawArea = holder.lockCanvas();
 
-                if (drawArea != null) {
-                    Rect screenRect = new Rect(0, 0, mWidth, mHeight);
-                    if (mWidth > mHeight) {
-                        drawArea.drawBitmap(mLandscape.getBitmap(), null, screenRect, null);
-                    } else {
-                        drawArea.drawBitmap(mPortrait.getBitmap(), null, screenRect, null);
-                    }
-                    holder.unlockCanvasAndPost(drawArea);
+            if (drawArea != null) {
+                Rect screenRect = new Rect(0, 0, mWidth, mHeight);
+                if (mWidth > mHeight) {
+                    drawArea.drawBitmap(mLandscape.getBitmap(), null, screenRect, null);
+                } else {
+                    drawArea.drawBitmap(mPortrait.getBitmap(), null, screenRect, null);
                 }
+                holder.unlockCanvasAndPost(drawArea);
             }
+            mHandler.removeCallbacks(mRunner);
         }
     }
 }
