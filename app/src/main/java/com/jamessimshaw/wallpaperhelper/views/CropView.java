@@ -19,6 +19,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.GestureDetector;
@@ -32,8 +33,8 @@ public class CropView extends View {
     private Bitmap mImage;
     private boolean mCropLandscape;
     private Paint mCropRectanglePaint;
-    private Rect mCropRectangle;
-    private Rect mBaseBitmapArea;
+    private RectF mCropRectangle;
+    private RectF mBaseBitmapArea;
     private double mScaleFactor;
     private GestureDetector mGestureDetector;
     private ScaleGestureDetector mScaleGestureDetector;
@@ -98,34 +99,34 @@ public class CropView extends View {
         setMeasuredDimension(width, height);
     }
 
-    private Rect createBaseBitmapRectangle(Bitmap image, Rect containingRect) {
+    private RectF createBaseBitmapRectangle(Bitmap image, RectF containingRect) {
         int imageWidth = image.getWidth();
         int imageHeight = image.getHeight();
-        int containingWidth = containingRect.width();
-        int containingHeight = containingRect.height();
-        float multFactor = Math.min(((float)(imageHeight))/containingHeight,
-                                    ((float)imageWidth)/containingWidth);
+        float containingWidth = containingRect.width();
+        float containingHeight = containingRect.height();
+        float multFactor = Math.min(imageHeight / containingHeight,
+                                    imageWidth / containingWidth);
 
         //sets the default height and width so that the image is at
         //least as large as the containing rectangle
-        int newImageWidth = Math.round(imageWidth / multFactor);
-        int newImageHeight = Math.round(imageHeight / multFactor);
+        float newImageWidth = imageWidth / multFactor;
+        float newImageHeight = imageHeight / multFactor;
 
         //calculates the difference in x and y coordinates relative to the internal rectangle
-        int xOffset = (newImageWidth - containingWidth) / 2;
-        int yOffset = (newImageHeight - containingHeight) / 2;
+        float xOffset = (newImageWidth - containingWidth) / 2;
+        float yOffset = (newImageHeight - containingHeight) / 2;
 
-        return new Rect(containingRect.left - xOffset,
+        return new RectF(containingRect.left - xOffset,
                         containingRect.top - yOffset,
                         containingRect.right + xOffset,
                         containingRect.bottom + yOffset);
     }
 
-    private Rect createCropRectangle(int width, int height, float ratio) {
-        int rectangleWidth;
-        int rectangleHeight;
-        int rectangleStartX;
-        int rectangleStartY;
+    private RectF createCropRectangle(int width, int height, float ratio) {
+        float rectangleWidth;
+        float rectangleHeight;
+        float rectangleStartX;
+        float rectangleStartY;
 
         //Calculate long side first, then short side
         if(isCropLandscape()) {
@@ -138,22 +139,22 @@ public class CropView extends View {
         }
         rectangleStartX = (width - rectangleWidth) / 2;
         rectangleStartY = (height - rectangleHeight) / 2;
-        return new Rect(rectangleStartX,
+        return new RectF(rectangleStartX,
                         rectangleStartY,
                         rectangleStartX + rectangleWidth,
                         rectangleStartY + rectangleHeight);
     }
 
-    private int determineLongSide(int maxSize) {
-        return (int)Math.round(maxSize * mScaleFactor);
+    private float determineLongSide(int maxSize) {
+        return (float)(maxSize * mScaleFactor);
     }
 
-    private int determineShortSide(int longSide, int width, int height, float ratio) {
+    private float determineShortSide(float longSide, int width, int height, float ratio) {
         if (width > height) {
-            return Math.round(longSide / ratio);
+            return longSide / ratio;
         }
         else {
-            return Math.round(longSide * ratio);
+            return longSide * ratio;
         }
     }
 
@@ -185,8 +186,8 @@ public class CropView extends View {
                 imageHeightScaleFactor);
         int yImageStart = Math.round((mCropRectangle.top - mBaseBitmapArea.top) *
                 imageHeightScaleFactor);
-        int width = Math.round(mCropRectangle.width() * imageHeightScaleFactor);
-        int height = Math.round(mCropRectangle.height() * imageHeightScaleFactor);
+        int width = (int)Math.floor(mCropRectangle.width() * imageHeightScaleFactor);
+        int height = (int)Math.floor(mCropRectangle.height() * imageHeightScaleFactor);
         return Bitmap.createBitmap(mImage, xImageStart, yImageStart, width, height);
     }
 
@@ -195,11 +196,9 @@ public class CropView extends View {
         int xStart = Math.round(event.getX());
         int yStart = Math.round(event.getY());
         if(mBaseBitmapArea.contains(xStart, yStart)) {
-            if (mScaleGestureDetector.onTouchEvent(event)) {
-                return true;
-            } else if (mGestureDetector.onTouchEvent(event)) {
-                return true;
-            }
+            boolean retVal = mScaleGestureDetector.onTouchEvent(event);
+            retVal = mGestureDetector.onTouchEvent(event) || retVal;
+            return retVal || super.onTouchEvent(event);
         }
         return super.onTouchEvent(event);
     }
@@ -238,8 +237,8 @@ public class CropView extends View {
             float scalingFactor = currentDistance / startDistance;
             int newHeight = Math.round(mBaseBitmapArea.height() * scalingFactor);
             int newWidth = Math.round(mBaseBitmapArea.width() * scalingFactor);
-            int xOffset = (newWidth - mBaseBitmapArea.height()) / 2;
-            int yOffset = (newHeight - mBaseBitmapArea.width()) / 2;
+            float xOffset = (newWidth - mBaseBitmapArea.height()) / 2;
+            float yOffset = (newHeight - mBaseBitmapArea.width()) / 2;
             mBaseBitmapArea.set(mBaseBitmapArea.left - xOffset,
                                 mBaseBitmapArea.top - yOffset,
                                 mBaseBitmapArea.right + xOffset,
