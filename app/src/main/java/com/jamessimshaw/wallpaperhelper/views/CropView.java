@@ -17,7 +17,6 @@ package com.jamessimshaw.wallpaperhelper.views;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
@@ -26,6 +25,8 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+
+import com.jamessimshaw.wallpaperhelper.R;
 
 public class CropView extends View {
     private Bitmap mImage;
@@ -46,7 +47,7 @@ public class CropView extends View {
     private void init() {
         mCropRectanglePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mCropRectanglePaint.setStyle(Paint.Style.STROKE);
-        mCropRectanglePaint.setColor(Color.parseColor("#FF33B5E5"));
+        mCropRectanglePaint.setColor(getResources().getColor(R.color.CropRectColor));
         mCropRectanglePaint.setStrokeWidth(5);
 
         mScaleFactor = 0.65;
