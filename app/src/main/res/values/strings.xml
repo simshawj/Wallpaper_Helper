@@ -27,4 +27,6 @@
     <string name="invalidCrop">Please make sure image is at least as large as the crop area.</string>
     <string name="setImageButtonText">Set Image</string>
     <string name="unableToSaveImageToast">Unable to save image, please try again.</string>
+    <string name="noLandscapeImage">Unable to load landscape image.  Please check your settings.</string>
+    <string name="noPortraitImage">Unable to load portrait image.  Please check your settings.</string>
 </resources>

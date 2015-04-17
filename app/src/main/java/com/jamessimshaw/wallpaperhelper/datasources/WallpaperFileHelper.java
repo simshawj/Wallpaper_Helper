@@ -14,12 +14,18 @@
 
 package com.jamessimshaw.wallpaperhelper.datasources;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.support.v4.app.NotificationCompat;
 
+import com.jamessimshaw.wallpaperhelper.R;
+import com.jamessimshaw.wallpaperhelper.activities.SettingsActivity;
 import com.jamessimshaw.wallpaperhelper.models.Wallpaper;
 
 import java.io.FileInputStream;
@@ -42,11 +48,33 @@ public class WallpaperFileHelper {
             fileInputStream.close();
         }
         catch (IOException e) {
-            //TODO:Set a default Wallpaper of a black screen and send a notification
+            //Set a default Wallpaper of a black screen and send a notification
             Bitmap.Config bitmapOptions = Bitmap.Config.ARGB_8888;
             bitmap = Bitmap.createBitmap(100, 100, bitmapOptions);
             Canvas canvas = new Canvas(bitmap);
             canvas.drawColor(Color.BLACK);
+
+            Intent settingsIntent = new Intent(context, SettingsActivity.class);
+            PendingIntent notificationIntent = PendingIntent.getActivity(
+                    context,
+                    0,
+                    settingsIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT
+            );
+
+            String notificationString = isLandscape ? context.getString(R.string.noLandscapeImage)
+                                                    : context.getString(R.string.noPortraitImage);
+
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
+                    .setSmallIcon(R.mipmap.ic_notification_small)
+                    .setContentTitle(context.getString(R.string.app_name))
+                    .setContentText(notificationString)
+                    .setContentIntent(notificationIntent);
+
+            int notificationId = 1;
+            NotificationManager manager = (NotificationManager) context.
+                    getSystemService(Context.NOTIFICATION_SERVICE);
+            manager.notify(notificationId, notificationBuilder.build());
         }
 
         return new Wallpaper(bitmap, isLandscape);
