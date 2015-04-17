@@ -52,6 +52,7 @@
         <activity
             android:name=".activities.ImageZoneSelectionActivity"
             android:label="@string/title_activity_image_zone_selection"
+            android:theme="@android:style/Theme.DeviceDefault.NoActionBar"
             android:parentActivityName=".activities.SettingsActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
