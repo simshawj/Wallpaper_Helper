@@ -18,7 +18,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -181,20 +180,20 @@ public class CropView extends View {
     }
 
     public Bitmap getCroppedImage() {
-        float imageHeightScaleFactor = ((float)mImage.getHeight()) / mBaseBitmapArea.height();
+        float imageHeightScaleFactor = mImage.getHeight() / mBaseBitmapArea.height();
         int xImageStart = Math.round((mCropRectangle.left - mBaseBitmapArea.left) *
                 imageHeightScaleFactor);
         int yImageStart = Math.round((mCropRectangle.top - mBaseBitmapArea.top) *
                 imageHeightScaleFactor);
-        int width = (int)Math.floor(mCropRectangle.width() * imageHeightScaleFactor);
-        int height = (int)Math.floor(mCropRectangle.height() * imageHeightScaleFactor);
+        int width = Math.round(mCropRectangle.width() * imageHeightScaleFactor);
+        int height = Math.round(mCropRectangle.height() * imageHeightScaleFactor);
         return Bitmap.createBitmap(mImage, xImageStart, yImageStart, width, height);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        int xStart = Math.round(event.getX());
-        int yStart = Math.round(event.getY());
+        float xStart = event.getX();
+        float yStart = event.getY();
         if(mBaseBitmapArea.contains(xStart, yStart)) {
             boolean retVal = mScaleGestureDetector.onTouchEvent(event);
             retVal = mGestureDetector.onTouchEvent(event) || retVal;
@@ -211,12 +210,10 @@ public class CropView extends View {
 
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            int xOffset = Math.round(distanceX);
-            int yOffset = Math.round(distanceY);
-            mBaseBitmapArea.set(mBaseBitmapArea.left - xOffset,
-                                mBaseBitmapArea.top - yOffset,
-                                mBaseBitmapArea.right - xOffset,
-                                mBaseBitmapArea.bottom - yOffset);
+            mBaseBitmapArea.set(mBaseBitmapArea.left - distanceX,
+                                mBaseBitmapArea.top - distanceY,
+                                mBaseBitmapArea.right - distanceX,
+                                mBaseBitmapArea.bottom - distanceY);
             invalidate();
             return true;
         }
@@ -235,8 +232,8 @@ public class CropView extends View {
         public boolean onScale(ScaleGestureDetector detector) {
             float currentDistance = detector.getCurrentSpan();
             float scalingFactor = currentDistance / startDistance;
-            int newHeight = Math.round(mBaseBitmapArea.height() * scalingFactor);
-            int newWidth = Math.round(mBaseBitmapArea.width() * scalingFactor);
+            float newHeight = mBaseBitmapArea.height() * scalingFactor;
+            float newWidth = mBaseBitmapArea.width() * scalingFactor;
             float xOffset = (newWidth - mBaseBitmapArea.height()) / 2;
             float yOffset = (newHeight - mBaseBitmapArea.width()) / 2;
             mBaseBitmapArea.set(mBaseBitmapArea.left - xOffset,
