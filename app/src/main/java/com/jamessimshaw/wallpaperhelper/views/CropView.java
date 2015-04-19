@@ -235,12 +235,14 @@ public class CropView extends View {
             float scalingFactor = currentDistance / startDistance;
             float newHeight = mBaseBitmapArea.height() * scalingFactor;
             float newWidth = mBaseBitmapArea.width() * scalingFactor;
-            float xOffset = (newWidth - mBaseBitmapArea.height()) / 2;
-            float yOffset = (newHeight - mBaseBitmapArea.width()) / 2;
+            float xOffset = (newWidth - mBaseBitmapArea.width()) / 2;
+            float yOffset = (newHeight - mBaseBitmapArea.height()) / 2;
             mBaseBitmapArea.set(mBaseBitmapArea.left - xOffset,
                                 mBaseBitmapArea.top - yOffset,
                                 mBaseBitmapArea.right + xOffset,
                                 mBaseBitmapArea.bottom + yOffset);
+            startDistance = currentDistance;
+            invalidate();
             return true;
         }
     };
