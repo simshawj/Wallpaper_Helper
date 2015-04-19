@@ -20,7 +20,7 @@
     <string name="landscapeSettingTitle">Select Landscape Picture</string>
     <string name="portraitSettingTitle">Select Portrait Picture</string>
     <string name="preferenceLabel">Preferences</string>
-    <string name="version">1.0</string>
+    <string name="version">1.1</string>
     <string name="title_activity_image_zone_selection">ImageZoneSelectionActivity</string>
     <string name="fileNotFoundToast">Unable to load file, please try again.</string>
     <string name="exceptionCaughtMessage">"Exception caught: "</string>
