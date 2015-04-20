@@ -12,26 +12,25 @@
  *   GNU General Public License for more details.
  */
 
-apply plugin: 'com.android.application'
+package com.jamessimshaw.wallpaperhelper.models;
 
-android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+import android.graphics.Bitmap;
 
-    defaultConfig {
-        applicationId "com.jamessimshaw.wallpaperhelper"
-        minSdkVersion 15
-        targetSdkVersion 22
+public class Wallpaper {
+    private Bitmap mBitmap;
+    private boolean mIsLandscape;
+
+    public Wallpaper(Bitmap bitmap, boolean isLandscape) {
+        mBitmap = bitmap;
+        mIsLandscape = isLandscape;
     }
 
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-        }
+    public Bitmap getBitmap() {
+        return mBitmap;
     }
-}
 
-dependencies {
-    compile "com.android.support:support-v4:22.0.0"
+    public boolean isLandscape() {
+        return mIsLandscape;
+    }
+
 }

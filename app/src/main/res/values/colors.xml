@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
   ~ Copyright (C) 2014-2015 James Simshaw
   ~
@@ -14,9 +13,7 @@
   ~   GNU General Public License for more details.
   -->
 
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <Preference android:title="@string/landscapeSettingTitle"
-                android:key="landscape" />
-    <Preference android:title="@string/portraitSettingTitle"
-                android:key="portrait" />
-</PreferenceScreen>
+<resources>
+    <color name="SetImageTextColor">#FF33B5E5</color>
+    <color name="CropRectColor">#FF33B5E5</color>
+</resources>
