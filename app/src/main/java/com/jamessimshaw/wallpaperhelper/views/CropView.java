@@ -203,7 +203,8 @@ public class CropView extends View {
         return super.onTouchEvent(event);
     }
 
-    private GestureDetector.SimpleOnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
+    private GestureDetector.SimpleOnGestureListener mGestureListener = new
+            GestureDetector.SimpleOnGestureListener() {
         @Override
         public boolean onDown(MotionEvent e) {
             return true;
@@ -220,7 +221,8 @@ public class CropView extends View {
         }
     };
 
-    private ScaleGestureDetector.SimpleOnScaleGestureListener mScaleGestureListener = new ScaleGestureDetector.SimpleOnScaleGestureListener() {
+    private ScaleGestureDetector.SimpleOnScaleGestureListener mScaleGestureListener = new
+            ScaleGestureDetector.SimpleOnScaleGestureListener() {
         float startDistance;
 
         @Override
