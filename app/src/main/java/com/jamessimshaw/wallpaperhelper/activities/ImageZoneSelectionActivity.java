@@ -44,8 +44,6 @@ public class ImageZoneSelectionActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_zone_selection);
 
-        //getActionBar().hide();
-
         Button cropButton = (Button) findViewById(R.id.cropButton);
 
         Intent intent = getIntent();
