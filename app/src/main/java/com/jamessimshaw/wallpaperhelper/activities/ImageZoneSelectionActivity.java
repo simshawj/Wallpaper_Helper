@@ -65,7 +65,7 @@ public class ImageZoneSelectionActivity extends Activity {
             return BitmapFactory.decodeStream(this.getContentResolver().openInputStream(
                     Uri.parse(file)));
         }
-        catch (FileNotFoundException e) {
+        catch (NullPointerException | FileNotFoundException e) {
             Log.e(TAG, getString(R.string.exceptionCaughtMessage), e);
             Toast.makeText(this, getString(R.string.fileNotFoundToast), Toast.LENGTH_LONG).show();
             finish();
